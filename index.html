@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#fbf8f2">
+<title>ATELIER — Laboratorio de Carteras | Prototipo</title>
+<style>
+:root{--ink:#37312f;--muted:#847d78;--edge:#e7dfd7;--cream:#fbf8f2;--paper:#fffdf9;--coral:#ec8c75;--coral-dark:#cf705b;--lav:#ebe7f9;--body:#ac5d58;--handle:#6c3e38;--metal:#cfaa73}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);background:var(--cream)}
+button,input{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible{outline:3px solid #e9ab91;outline-offset:3px}
+.app{min-height:100vh;display:flex;flex-direction:column}.topbar{height:82px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:0 32px;border-bottom:1px solid var(--edge);background:var(--paper)}
+.brand{display:flex;gap:12px;align-items:center}.brandmark{width:42px;height:42px;border-radius:14px;background:#e9dfd1;display:grid;place-items:center;transform:rotate(-7deg);font-size:23px}.brand b{font-family:Georgia,serif;font-size:25px;letter-spacing:-1.4px}.brand small{display:block;letter-spacing:2.1px;font-size:9px;color:var(--muted);font-weight:700;margin-top:1px}
+.topcenter{display:flex;align-items:center;gap:10px;background:#f7f1ec;padding:8px 12px;border-radius:999px;font-size:12px;color:#74655e}.dot{height:8px;width:8px;border-radius:50%;background:#df9d75}.topactions{display:flex;gap:10px;align-items:center}.outline{border:1px solid #ded2c7;border-radius:13px;background:#fffdfb;padding:12px 16px;color:var(--ink);font-weight:700;font-size:13px}.outline:hover{background:#f8eee9}.profile{height:42px;width:42px;border:1px solid #eadbca;border-radius:50%;background:#efe8dc;display:grid;place-items:center}
+.workspace{display:grid;grid-template-columns:250px minmax(420px,1fr) 320px;flex:1;min-height:0}.sidebar{background:#fffdf9;border-right:1px solid var(--edge);padding:26px 18px;display:flex;flex-direction:column;gap:18px}
+.sectiontag{text-transform:uppercase;font-size:10px;letter-spacing:2.3px;color:#96897f;font-weight:800;margin:0 0 11px}.side-title{font-family:Georgia,serif;font-size:27px;margin:0}.side-sub{font-size:12px;color:var(--muted);line-height:1.55;margin:6px 0 4px}
+.model{display:flex;gap:12px;align-items:center;padding:10px;border:1px solid #eaded4;border-radius:17px;background:#fff;min-height:92px;width:100%;text-align:left}.model.active{background:#fff4ec;border:2px solid #d78266;padding:9px}.model.locked{opacity:.58;cursor:not-allowed}.thumb{height:64px;width:66px;background:#f0e9e4;border-radius:12px;display:grid;place-items:center;flex-shrink:0}.thumb svg{width:57px;height:56px}.model strong{display:block;font-size:13px}.model small{display:block;color:#94877f;font-size:11px;margin-top:5px}.mini-label{display:inline-block;border-radius:100px;background:#e8e3f6;color:#6e6292;font-size:9px;font-weight:800;padding:4px 8px;margin-top:7px}
+.side-bottom{margin-top:auto;border-radius:18px;padding:16px;background:#efe9f5;display:flex;flex-direction:column;gap:8px}.side-bottom strong{font-size:14px}.side-bottom p{font-size:11px;line-height:1.6;margin:0;color:#796e81}
+.stage-wrap{padding:27px 32px 30px;background:#faf7f2;display:flex;flex-direction:column;min-width:0}
+.crumb{display:flex;gap:9px;align-items:center;color:#95877e;font-size:12px;font-weight:600}.crumb b{color:#665a54}
+.stage-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin:13px 0 13px}.stage-head h1{font-family:Georgia,serif;font-size:clamp(30px,3vw,46px);line-height:1.07;letter-spacing:-1px;margin:0}.stage-head p{font-size:13px;color:var(--muted);margin:9px 0 0}.stage-pill{border:1px solid #e1d6c9;border-radius:30px;padding:10px 12px;color:#76685f;font-size:11px;white-space:nowrap;background:#fffdf9}
+.stage{flex:1;min-height:480px;max-height:690px;border:1px solid #e9ded5;border-radius:26px;position:relative;overflow:hidden;background:radial-gradient(ellipse at 47% 48%,#fffaf1 0%,#f7eee5 62%,#f2e7dd 100%);display:flex;align-items:center;justify-content:center}
+.stage:before{content:"";position:absolute;inset:0;background-image:radial-gradient(#bea99e52 1px,transparent 1px);background-size:19px 19px;opacity:.17;pointer-events:none}
+.sticker{position:absolute;top:23px;left:24px;transform:rotate(-7deg);z-index:3;border-radius:12px;padding:10px 13px;background:#ebdcf4;color:#7d6584;font-weight:900;font-size:12px;box-shadow:0 7px 15px #8d6b5314}
+.modeview{position:absolute;top:19px;right:20px;display:flex;gap:4px;z-index:3;background:#ffffffbd;padding:5px;border:1px solid #e6dcd5;border-radius:12px}
+.modeview button{border:0;background:transparent;color:#8b8078;padding:8px 12px;font-size:11px;font-weight:700;border-radius:8px}.modeview button.sel{background:#3e3431;color:#fff}
+.scene{position:relative;width:min(92%,700px);height:100%;display:grid;place-items:center}.scene svg{width:100%;max-height:92%;filter:drop-shadow(0 34px 17px #6a453329);transition:transform .35s ease;overflow:visible}
+.scene.front svg{transform:scale(.9)}.scene.side svg{transform:scaleX(.51) skewY(-4deg)}
+.scene svg .bag-body{fill:var(--body)}.scene svg .bag-handle{stroke:var(--handle)}.scene svg .bag-metal{fill:var(--metal)}
+.scene .body-sheen{fill:#fff;opacity:.07}.scene .body-shadow{fill:#130e14;opacity:.13}.scene[data-texture="lona"] .texture{opacity:.32}.scene[data-texture="graneado"] .texture{opacity:.22}.scene[data-texture="liso"] .texture{opacity:0}
+.floor{position:absolute;bottom:7%;width:53%;height:24px;background:#9f796f3d;border-radius:50%;filter:blur(18px)}
+.stage-footer{position:absolute;bottom:21px;left:24px;right:24px;display:flex;justify-content:space-between;align-items:center;z-index:3}.zoom-hint{font-size:11px;color:#918078;background:#fff9f2a8;padding:9px 12px;border-radius:30px}.rotate{display:flex;gap:7px}.round{border:1px solid #e4d5cb;background:#fffdf9;width:38px;height:38px;border-radius:50%;font-size:20px;color:#695e58}
+.foot-note{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-top:15px;font-size:11px;color:#a09389}.foot-note b{color:#766258}
+.control-panel{background:#fffdf9;border-left:1px solid var(--edge);display:flex;flex-direction:column;padding:25px 22px 22px;gap:14px;min-width:0}
+.panel-title{display:flex;justify-content:space-between;align-items:center}.panel-title h2{font-family:Georgia,serif;font-size:26px;margin:0}.counter{background:#f4e8dd;border-radius:20px;padding:6px 9px;color:#956c57;font-size:10px;font-weight:800}
+.panel-sub{font-size:12px;color:#91837b;line-height:1.5;margin:0 0 2px}.divider{height:1px;background:#efe6df}
+.fieldhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;font-size:13px;font-weight:800}.fieldhead small{font-size:11px;font-weight:500;color:#9e918a}
+.swatches{display:flex;gap:9px;flex-wrap:wrap}.swatch{width:34px;height:34px;border-radius:50%;border:3px solid #fff;outline:1px solid #e6ddd5;position:relative;background:var(--swatch)}.swatch.selected{outline:2px solid #3f342f}.swatch.selected:after{content:"✓";color:#fff;font-size:16px;text-shadow:0 1px 2px #0008;position:absolute;inset:0;display:grid;place-items:center;font-weight:900}.control-group{padding:3px 0 8px}
+.materials{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.material{border:1px solid #e4d9d0;border-radius:12px;background:#fff;padding:9px 4px;font-size:11px;color:#786d66;font-weight:700}.material.selected{border-color:#d58974;background:#fff2ea;color:#b76555}
+.slider-row{margin-bottom:12px}.range-label{display:flex;justify-content:space-between;font-size:11px;margin-bottom:5px;color:#736b66}.range-label output{font-weight:800;color:#493d38}.slider-row input{width:100%;accent-color:#d78169;cursor:pointer}
+.action-area{margin-top:auto;display:grid;gap:9px;padding-top:5px}.primary{width:100%;background:#36302d;color:white;border:0;padding:15px;border-radius:14px;font-weight:800;font-size:13px;box-shadow:0 5px 0 #c4b8aa5c}.primary:hover{background:#54413b}.secondary{width:100%;background:#fff;border:1px solid #e6d9ce;padding:13px;border-radius:14px;font-weight:700;color:#786c64;font-size:12px}.helper{color:#aaa09b;font-size:10px;line-height:1.5;text-align:center}
+.molds{display:none;width:100%;height:100%;padding:26px;overflow:auto;align-items:center;justify-content:center}.molds.show{display:flex}.mold-sheet{width:min(100%,560px);min-height:395px;background:white;box-shadow:0 20px 32px #9d81752c;border:1px solid #eee2d7;padding:23px 25px;position:relative}.sheet-head{display:flex;justify-content:space-between;align-items:start;border-bottom:1px solid #ded8d1;padding-bottom:10px;margin-bottom:15px;font-size:12px}.sheet-head b{font-family:Georgia,serif;font-size:19px}.sheet-head small{color:#a59991}.parts{display:grid;grid-template-columns:1.25fr .7fr;gap:15px;align-items:center}.pattern{border:1.7px solid #76665e;background:repeating-linear-gradient(45deg,white,white 9px,#f9f6f3 10px);height:140px;display:flex;align-items:center;justify-content:center;position:relative;font-size:11px;text-align:center}.pattern.small{height:68px}.pattern:before{content:"";inset:7px;position:absolute;border:1px dashed #c9b6a8}.pattern-text{background:#fffdf9;padding:4px 7px;z-index:1}.parts .long{grid-column:span 2;height:34px}.sheet-footer{font-size:10px;color:#958b84;display:flex;justify-content:space-between;align-items:center;margin-top:15px}.mold-overlay{position:absolute;left:50%;top:58%;transform:translate(-50%,-50%) rotate(-14deg);border:2px solid #cd7e70;color:#bd7061;padding:11px 17px;font-size:18px;font-weight:900;letter-spacing:3px;opacity:.82;white-space:nowrap;pointer-events:none}
+.mold-stage{background:#f1ece7}.mold-stage .scene,.mold-stage .sticker,.mold-stage .modeview,.mold-stage .stage-footer{display:none}
+.placeholder{background:#fbf4eb;border:1px dashed #d9bdad;border-radius:12px;padding:11px;font-size:11px;line-height:1.5;color:#816c62}
+.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,20px);opacity:0;transition:.25s;background:#35302e;color:#fff;padding:12px 18px;border-radius:12px;pointer-events:none;z-index:50;font-size:13px}.toast.show{opacity:1;transform:translate(-50%,0)}
+[hidden]{display:none!important}
+@media(max-width:1100px){.workspace{grid-template-columns:200px minmax(350px,1fr) 275px}.sidebar{padding:20px 12px}.stage-wrap{padding:20px}.control-panel{padding:20px 14px}.topcenter{display:none}.stage{min-height:410px}.thumb{width:53px}}
+@media(max-width:850px){.topbar{height:70px;padding:0 16px}.brand b{font-size:20px}.workspace{grid-template-columns:1fr}.sidebar{border-right:0;border-bottom:1px solid var(--edge);padding:14px 18px}.sidebar .side-title,.sidebar .side-sub,.sidebar .sectiontag,.side-bottom{display:none}.models{display:flex;gap:9px;overflow:auto}.model{min-width:180px;min-height:75px}.thumb{height:52px}.stage-wrap{padding:20px 16px}.stage-head h1{font-size:31px}.stage-pill{display:none}.stage{min-height:390px;height:460px;flex:none}.control-panel{border-left:0;border-top:1px solid var(--edge);padding:22px 18px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:22px}.control-panel>.panel-title,.control-panel>.panel-sub,.control-panel>.divider,.action-area{grid-column:1/-1}.control-panel>.divider{display:none}.foot-note{display:block}.stage-footer{left:13px;right:13px}.stage .sticker{top:13px;left:12px}.modeview{right:10px;top:10px}}
+@media(max-width:500px){.topbar .outline{padding:9px;font-size:11px}.topbar .profile{display:none}.control-panel{display:block}.stage-head p{font-size:12px}.stage{height:365px;min-height:365px}.stage .scene{width:100%}.modeview button{padding:7px;font-size:10px}.zoom-hint{max-width:160px;font-size:10px}.molds{padding:12px}.mold-sheet{padding:14px;min-height:350px}.mold-overlay{font-size:12px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="topbar">
+  <div class="brand"><div class="brandmark" aria-hidden="true">✿</div><div><b>atelier.</b><small>LABORATORIO DE CARTERAS</small></div></div>
+  <div class="topcenter"><span class="dot"></span> Estás creando algo único <span>✦</span></div>
+  <div class="topactions"><button class="outline" id="save-top">♡ Guardar diseño</button><div class="profile" title="Ingreso de usuarios: más adelante">☺</div></div>
+</header>
+<main class="workspace">
+  <aside class="sidebar">
+    <div><p class="sectiontag">Paso 01 · El taller</p><h2 class="side-title">Elegí tu diseño</h2><p class="side-sub">Cada cartera es un punto de partida. ¡Hacela tuya!</p></div>
+    <div class="models">
+      <button class="model active" aria-current="true"><div class="thumb"><svg viewBox="0 0 80 70" aria-hidden="true"><path d="M20 27 Q20 1 37 1 Q54 1 54 27" stroke="#855147" stroke-width="5" fill="none"/><path d="M15 23 H63 L59 65 H18 Z" fill="#a75d59"/><path d="M15 23 H63" stroke="#6a393a" stroke-width="2"/></svg></div><span><strong>Tote Aurora</strong><small>Modelo inicial</small><span class="mini-label">DISPONIBLE</span></span></button>
+      <button class="model locked" aria-disabled="true"><div class="thumb"><svg viewBox="0 0 80 70" aria-hidden="true"><rect x="8" y="26" width="65" height="35" rx="12" fill="#bc97ae"/><path d="M18 23 Q40 -4 64 23" fill="none" stroke="#927387" stroke-width="5"/></svg></div><span><strong>Mini Lía</strong><small>Bandolera</small><span class="mini-label">PRÓXIMAMENTE</span></span></button>
+      <button class="model locked" aria-disabled="true"><div class="thumb"><svg viewBox="0 0 80 70" aria-hidden="true"><path d="M12 25 H70 L61 61 H22Z" fill="#c5a479"/><path d="M30 30 Q20 4 48 7 Q60 9 53 30" fill="none" stroke="#9d7b54" stroke-width="5"/></svg></div><span><strong>Shopper Vera</strong><small>Gran formato</small><span class="mini-label">PRÓXIMAMENTE</span></span></button>
+    </div>
+    <div class="side-bottom"><span style="font-size:22px">✦</span><strong>Tu estilo, tus reglas.</strong><p>Este es nuestro primer boceto interactivo. Los próximos diseños pueden usar tus vectores y renders como base.</p></div>
+  </aside>
+  <section class="stage-wrap">
+    <div class="crumb">Colección inicial <span>›</span> <b>Tote Aurora</b> <span>›</span> <span id="crumb-current">Personalizar</span></div>
+    <div class="stage-head"><div><h1 id="stage-title">Diseñá tu <em style="font-weight:400;color:#c87865">Aurora.</em></h1><p id="stage-desc">Probá colores, combiná materiales y elegí el tamaño ideal.</p></div><div class="stage-pill">✧ Vista conceptual · V0.1</div></div>
+    <div class="stage" id="stage">
+      <div class="sticker">¡Es tu creación! ✨</div>
+      <div class="modeview" role="group" aria-label="Vista de la cartera"><button data-view="front">Frente</button><button data-view="three" class="sel">3/4</button><button data-view="side">Lado</button></div>
+      <div class="scene" id="scene" data-texture="liso">
+        <div class="floor"></div>
+        <svg viewBox="0 0 720 510" role="img" aria-label="Ilustración conceptual de una cartera Tote con colores personalizables">
+          <defs>
+            <linearGradient id="bodyGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".29"/><stop offset=".5" stop-color="#fff" stop-opacity=".02"/><stop offset="1" stop-color="#000" stop-opacity=".18"/></linearGradient>
+            <pattern id="texture" width="6" height="6" patternUnits="userSpaceOnUse"><path d="M0 0L6 6 M6 0L0 6" stroke="#fff" stroke-width=".35" opacity=".7"/></pattern>
+            <linearGradient id="sideGrad" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#000" stop-opacity=".21"/><stop offset="1" stop-color="#fff" stop-opacity=".06"/></linearGradient>
+          </defs>
+          <g id="bag-drawing">
+            <path id="sidepiece" class="bag-body" d="M 552 139 L 612 110 L 603 386 L 548 416 Z"/>
+            <path id="side-shade" fill="url(#sideGrad)" d="M 552 139 L 612 110 L 603 386 L 548 416 Z"/>
+            <path d="M 210 146 L 612 110 L 552 139 Z" fill="#302323" opacity=".20"/>
+            <path class="bag-handle" d="M 253 151 C 248 52 257 45 310 45 C 363 45 368 56 366 154" stroke-width="19" fill="none" stroke-linecap="round"/>
+            <path class="bag-handle" d="M 405 151 C 400 38 423 34 469 40 C 525 43 524 70 520 151" stroke-width="19" fill="none" stroke-linecap="round"/>
+            <path class="bag-body" id="mainbody" d="M 192 139 L 552 139 L 548 416 L 196 416 Z" stroke="#39211d" stroke-opacity=".19" stroke-width="2"/>
+            <path id="bodyshine" fill="url(#bodyGrad)" d="M 192 139 L 552 139 L 548 416 L 196 416 Z"/>
+            <path class="texture" fill="url(#texture)" d="M 192 139 L 552 139 L 548 416 L 196 416 Z" opacity="0"/>
+            <path d="M 198 152 L 548 152" stroke="#37201c" stroke-opacity=".26" stroke-width="3"/>
+            <path d="M 204 399 L 540 399" stroke="#fff" stroke-opacity=".20" stroke-width="2" stroke-dasharray="3 6"/>
+            <path d="M 211 152 L 210 406 M 537 152 L 536 406" stroke="#3b1a17" stroke-opacity=".13" stroke-width="3"/>
+            <path class="bag-handle" d="M 254 148 L 254 241 M 365 148 L 365 241 M 406 148 L 406 241 M 519 148 L 519 241" stroke-width="18" stroke-linecap="round" opacity=".92"/>
+            <rect class="bag-metal" x="244" y="222" width="20" height="6" rx="2"/><rect class="bag-metal" x="355" y="222" width="20" height="6" rx="2"/><rect class="bag-metal" x="396" y="222" width="20" height="6" rx="2"/><rect class="bag-metal" x="509" y="222" width="20" height="6" rx="2"/>
+            <g transform="translate(319 311)" opacity=".72"><path d="M-21 0 C-14 -15 0 -12 0 -2 C0 -12 14 -15 21 0 C12 19 0 24 0 24 C0 24 -12 19 -21 0" fill="#fff2e7"/><text x="0" y="45" text-anchor="middle" font-family="Georgia,serif" font-size="15" fill="#fff7ed">atelier.</text></g>
+          </g>
+        </svg>
+      </div>
+      <div class="molds" id="molds">
+        <div class="mold-sheet">
+          <div class="sheet-head"><div><b>Tote Aurora</b><div>Vista previa del despiece · boceto</div></div><small>HOJA DEMO 01/02</small></div>
+          <div class="parts">
+            <div class="pattern"><span class="pattern-text">Frente y espalda<br><strong id="pattern-main">38 × 32 cm</strong></span></div>
+            <div><div class="pattern small"><span class="pattern-text">Fuelle lateral<br><strong id="pattern-side">12 × 32 cm</strong></span></div><div style="height:12px"></div><div class="pattern small"><span class="pattern-text">Base<br><strong id="pattern-base">38 × 12 cm</strong></span></div></div>
+            <div class="pattern long"><span class="pattern-text">Manijas · ejemplo (2 piezas)</span></div>
+          </div>
+          <div class="sheet-footer"><span>Esquema demostrativo — sin márgenes ni escala</span><span>ATELIER V0.1</span></div>
+          <div class="mold-overlay">NO APTO PARA CORTE</div>
+        </div>
+      </div>
+      <div class="stage-footer"><span class="zoom-hint" id="hint">↔ Cambiá el ángulo para ver tu diseño</span><div class="rotate"><button class="round" id="prev-view" title="Girar a la izquierda">↶</button><button class="round" id="next-view" title="Girar a la derecha">↷</button></div></div>
+    </div>
+    <div class="foot-note"><span>✦ Tu diseño cobra vida, paso a paso.</span><span><b>Importante:</b> la cartera es una ilustración y no un modelo 3D real.</span></div>
+  </section>
+  <aside class="control-panel">
+    <div class="panel-title"><h2 id="panel-heading">Personalizá</h2><span class="counter" id="step-number">PASO 02 / 03</span></div>
+    <p class="panel-sub" id="panel-sub">Como en un juego: elegí cada detalle de tu cartera favorita.</p><div class="divider"></div>
+    <div id="custom-controls" style="display:contents">
+      <div class="control-group"><div class="fieldhead">01 · Color del cuerpo <small id="body-name">Terracota</small></div><div class="swatches" id="colors-body"></div></div>
+      <div class="divider"></div>
+      <div class="control-group"><div class="fieldhead">02 · Color de las manijas <small id="handle-name">Cacao</small></div><div class="swatches" id="colors-handle"></div></div>
+      <div class="divider"></div>
+      <div class="control-group"><div class="fieldhead">03 · Textura <small>Simulada</small></div><div class="materials"><button class="material selected" data-material="liso">Suave</button><button class="material" data-material="graneado">Graneado</button><button class="material" data-material="lona">Lona</button></div></div>
+      <div class="divider"></div>
+      <div class="control-group"><div class="fieldhead">04 · Medidas <small>Ejemplo visual</small></div>
+        <div class="slider-row"><div class="range-label"><label for="width">Ancho</label><output id="width-label">38 cm</output></div><input type="range" id="width" min="26" max="48" value="38"></div>
+        <div class="slider-row"><div class="range-label"><label for="height">Alto</label><output id="height-label">32 cm</output></div><input type="range" id="height" min="22" max="42" value="32"></div>
+        <div class="slider-row"><div class="range-label"><label for="depth">Profundidad</label><output id="depth-label">12 cm</output></div><input type="range" id="depth" min="6" max="18" value="12"></div>
+      </div>
+    </div>
+    <div id="mold-controls" hidden>
+      <div class="placeholder"><b>Tu diseño ya tiene un despiece visual.</b><br>Este paso muestra cómo se podría organizar el visor de moldes. Todavía no genera patrones reales, PDFs ni páginas A4 a escala.</div>
+      <p style="color:#857970;font-size:12px;line-height:1.7">Cuando incorporemos tus moldes vectoriales podremos definir costuras, pinzas, márgenes, fuelles y paginado de impresión.</p>
+    </div>
+    <div class="action-area"><button class="primary" id="go-molds">Ver mis moldes →</button><button class="secondary" id="bottom-action">♡ Guardar borrador local</button><div class="helper" id="helper">Borrador en este navegador · Sin cuenta ni Google Drive por ahora.</div></div>
+  </aside>
+</main>
+<div role="status" aria-live="polite" class="toast" id="toast"></div>
+</div>
+<script>
+(function(){
+'use strict';
+const defaults={body:'#ac5d58',handle:'#6c3e38',material:'liso',width:38,height:32,depth:12,view:'three'};
+let s={...defaults},isMolds=false,toastTimer;
+try {const saved=JSON.parse(localStorage.getItem('atelier-demo')||'null');if(saved&&typeof saved==='object')s={...s,...saved};}catch(e){}
+const $=id=>document.getElementById(id);
+const colorNames={'#ac5d58':'Terracota','#d4b3aa':'Rosa viejo','#e1c692':'Manteca','#7b8c7e':'Salvia','#69577a':'Lavanda','#342e33':'Negro','#6c3e38':'Cacao','#b58c64':'Caramelo','#eee3d6':'Natural','#879398':'Pizarra'};
+const bodyColors=['#ac5d58','#d4b3aa','#e1c692','#7b8c7e','#69577a','#342e33'];
+const handleColors=['#6c3e38','#b58c64','#eee3d6','#342e33','#879398'];
+const views=['front','three','side'];
+function swatches(el,colors,key){
+  el.innerHTML='';
+  colors.forEach(c=>{
+    const b=document.createElement('button');b.className='swatch'+(s[key]===c?' selected':'');b.type='button';b.style.setProperty('--swatch',c);b.setAttribute('aria-label',colorNames[c]);b.setAttribute('aria-pressed',String(s[key]===c));
+    b.title=colorNames[c];b.addEventListener('click',()=>{s[key]=c;render()});el.appendChild(b);
+  });
+}
+function setView(view){s.view=view;render();}
+function patterns(){
+ $('pattern-main').textContent=s.width+' × '+s.height+' cm';
+ $('pattern-side').textContent=s.depth+' × '+s.height+' cm';
+ $('pattern-base').textContent=s.width+' × '+s.depth+' cm';
+}
+function render(){
+ document.documentElement.style.setProperty('--body',s.body);document.documentElement.style.setProperty('--handle',s.handle);
+ $('scene').dataset.texture=s.material;
+ $('scene').className='scene'+(s.view==='front'?' front':s.view==='side'?' side':'');
+ document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('sel',b.dataset.view===s.view));
+ document.querySelectorAll('[data-material]').forEach(b=>b.classList.toggle('selected',b.dataset.material===s.material));
+ ['width','height','depth'].forEach(key=>{$(key).value=s[key];$(key+'-label').textContent=s[key]+' cm'});
+ $('body-name').textContent=colorNames[s.body]||'Personalizado';$('handle-name').textContent=colorNames[s.handle]||'Personalizado';
+ swatches($('colors-body'),bodyColors,'body');swatches($('colors-handle'),handleColors,'handle');patterns();
+ // Adjust the illustrated body dimensions. Not a production geometry engine.
+ const xl=372-s.width*4.74, xr=372+s.width*4.74, yt=278-s.height*4.34, yb=278+s.height*4.34;
+ const side=Math.round(s.depth*5);
+ const bodyPath='M '+xl+' '+yt+' L '+xr+' '+yt+' L '+(xr-4)+' '+yb+' L '+(xl+4)+' '+yb+' Z';
+ ['mainbody','bodyshine'].forEach(id=>$(id).setAttribute('d',bodyPath));
+ document.querySelector('.texture').setAttribute('d',bodyPath);
+ const sidePath='M '+xr+' '+yt+' L '+(xr+side)+' '+(yt-side*.48)+' L '+(xr+side-9)+' '+(yb-30)+' L '+(xr-4)+' '+yb+' Z';
+ $('sidepiece').setAttribute('d',sidePath);$('side-shade').setAttribute('d',sidePath);
+}
+function showMolds(on){
+ isMolds=on;$('stage').classList.toggle('mold-stage',on);$('molds').classList.toggle('show',on);
+ $('custom-controls').hidden=on; $('custom-controls').style.display=on?'none':'contents';
+ $('mold-controls').hidden=!on;$('crumb-current').textContent=on?'Mis moldes':'Personalizar';
+ $('stage-title').innerHTML=on?'Tus <em style="font-weight:400;color:#c87865">moldes.</em>':'Diseñá tu <em style="font-weight:400;color:#c87865">Aurora.</em>';
+ $('stage-desc').textContent=on?'Así podría verse el visor de piezas vectoriales.':'Probá colores, combiná materiales y elegí el tamaño ideal.';
+ $('panel-heading').textContent=on?'Vista de moldes':'Personalizá';
+ $('step-number').textContent=on?'PASO 03 / 03':'PASO 02 / 03';
+ $('panel-sub').textContent=on?'Boceto del futuro visor de impresión.':'Como en un juego: elegí cada detalle de tu cartera favorita.';
+ $('go-molds').textContent=on?'← Volver a diseñar':'Ver mis moldes →';
+ $('bottom-action').textContent=on?'♡ Guardar este diseño':'♡ Guardar borrador local';
+ $('helper').textContent=on?'Moldes ilustrativos, no están listos para imprimir.':'Borrador en este navegador · Sin cuenta ni Google Drive por ahora.';
+}
+function notify(msg){let t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2600);}
+function save(){try{localStorage.setItem('atelier-demo',JSON.stringify(s));notify('♡ Diseño guardado en este navegador');}catch(e){notify('Tu navegador no permitió guardar el borrador');}}
+['width','height','depth'].forEach(id=>$(id).addEventListener('input',e=>{s[id]=Number(e.target.value);render();}));
+document.querySelectorAll('[data-material]').forEach(b=>b.addEventListener('click',()=>{s.material=b.dataset.material;render()}));
+document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view)));
+$('prev-view').addEventListener('click',()=>setView(views[(views.indexOf(s.view)+2)%3]));
+$('next-view').addEventListener('click',()=>setView(views[(views.indexOf(s.view)+1)%3]));
+$('go-molds').addEventListener('click',()=>showMolds(!isMolds));
+$('save-top').addEventListener('click',save);$('bottom-action').addEventListener('click',save);
+document.querySelectorAll('.model.locked').forEach(b=>b.addEventListener('click',()=>notify('Este modelo se incorporará más adelante')));
+render();showMolds(false);
+})();
+</script>
+</body>
+</html>
