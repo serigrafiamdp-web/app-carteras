@@ -80,13 +80,13 @@ button,input{font:inherit}button{cursor:pointer}button:focus-visible,input:focus
   </aside>
   <section class="stage-wrap">
     <div class="crumb">Colección inicial <span>›</span> <b>Meshy Minimalista</b> <span>›</span> <span id="crumb-current">Personalizar</span></div>
-    <div class="stage-head"><div><h1 id="stage-title">Diseñá tu <em style="font-weight:400;color:#c87865">cartera.</em></h1><p id="stage-desc">Explorá el modelo real en 3D y probá colores de muestra.</p></div><div class="stage-pill">✧ Modelo real · TEST04</div></div>
+    <div class="stage-head"><div><h1 id="stage-title">Diseñá tu <em style="font-weight:400;color:#c87865">cartera.</em></h1><p id="stage-desc">Explorá el modelo real en 3D y probá colores de muestra.</p></div><div class="stage-pill">✧ Modelo real · TEST05</div></div>
     <div class="stage" id="stage">
       <div class="sticker">Primer modelo 3D ✨</div>
       <div class="modeview" role="group" aria-label="Vista de la cartera"><button data-view="front">Frente</button><button data-view="three" class="sel">3/4</button><button data-view="side">Lado</button></div>
       <div class="scene" id="scene" data-texture="liso">
         <div class="floor"></div>
-        <div id="model-loading">Preparando cartera 3D…</div><model-viewer id="bag3d" src="./assets/models/meshy-minimalista.glb" alt="Cartera Meshy Minimalista en 3D" camera-controls auto-rotate rotation-per-second="10deg" shadow-intensity="1" exposure="1.05" environment-image="neutral" camera-orbit="35deg 75deg auto" interaction-prompt="auto"></model-viewer>
+        <div id="model-loading">Preparando cartera 3D…</div><model-viewer id="bag3d"  alt="Cartera Meshy Minimalista en 3D" camera-controls auto-rotate rotation-per-second="10deg" shadow-intensity="1" exposure="1.05" environment-image="neutral" camera-orbit="35deg 75deg auto" interaction-prompt="auto"></model-viewer>
       </div>
       <div class="molds" id="molds">
         <div class="mold-sheet">
@@ -195,6 +195,24 @@ document.querySelectorAll('.model.locked').forEach(b=>b.addEventListener('click'
 $('go-molds').disabled=true;
 updateColors();$('scale').value=state.scale;$('scale-label').textContent=Math.round(state.scale*100)+'%';
 document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('sel',b.dataset.view===state.view));
+
+function loadCorrectedMeshy(){
+ const urls=Array.from({length:8},(_,i)=>'./assets/models/meshy-minimalista.part'+(i+1)+'.b64');
+ Promise.all(urls.map(async url=>{
+  const response=await fetch(url);
+  if(!response.ok)throw new Error('Recurso 3D no disponible: '+url);
+  return response.text();
+ })).then(parts=>{
+  const raw=atob(parts.join(''));
+  const bytes=new Uint8Array(raw.length);
+  for(let i=0;i<raw.length;i++)bytes[i]=raw.charCodeAt(i);
+  viewer.src=URL.createObjectURL(new Blob([bytes],{type:'model/gltf-binary'}));
+ }).catch(error=>{
+  $('model-loading').textContent='No pudimos cargar la cartera. Recargá la página.';
+  status.textContent='Error al preparar la geometría 3D. '+error.message;
+ });
+}
+loadCorrectedMeshy();
 })();
 </script>
 </body>
