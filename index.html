@@ -47,7 +47,19 @@ button,input{font:inherit}button{cursor:pointer}button:focus-visible,input:focus
 @media(max-width:1100px){.workspace{grid-template-columns:200px minmax(350px,1fr) 275px}.sidebar{padding:20px 12px}.stage-wrap{padding:20px}.control-panel{padding:20px 14px}.topcenter{display:none}.stage{min-height:410px}.thumb{width:53px}}
 @media(max-width:850px){.topbar{height:70px;padding:0 16px}.brand b{font-size:20px}.workspace{grid-template-columns:1fr}.sidebar{border-right:0;border-bottom:1px solid var(--edge);padding:14px 18px}.sidebar .side-title,.sidebar .side-sub,.sidebar .sectiontag,.side-bottom{display:none}.models{display:flex;gap:9px;overflow:auto}.model{min-width:180px;min-height:75px}.thumb{height:52px}.stage-wrap{padding:20px 16px}.stage-head h1{font-size:31px}.stage-pill{display:none}.stage{min-height:390px;height:460px;flex:none}.control-panel{border-left:0;border-top:1px solid var(--edge);padding:22px 18px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:22px}.control-panel>.panel-title,.control-panel>.panel-sub,.control-panel>.divider,.action-area{grid-column:1/-1}.control-panel>.divider{display:none}.foot-note{display:block}.stage-footer{left:13px;right:13px}.stage .sticker{top:13px;left:12px}.modeview{right:10px;top:10px}}
 @media(max-width:500px){.topbar .outline{padding:9px;font-size:11px}.topbar .profile{display:none}.control-panel{display:block}.stage-head p{font-size:12px}.stage{height:365px;min-height:365px}.stage .scene{width:100%}.modeview button{padding:7px;font-size:10px}.zoom-hint{max-width:160px;font-size:10px}.molds{padding:12px}.mold-sheet{padding:14px;min-height:350px}.mold-overlay{font-size:12px}}
+
+#bag3d{display:block;width:100%;height:100%;position:relative;z-index:2;--poster-color:transparent}
+#bag3d:focus-visible{outline:3px solid #e9ab91}
+#model-loading{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:13px;color:#957d76;pointer-events:none}
+#color-warning{font-size:11px;line-height:1.6;color:#958780}
+#view-status{font-size:11px;line-height:1.5;color:#786b64;background:#f7efe9;padding:10px;border-radius:12px}
+.scene{width:100%;max-width:100%;height:100%}
+.scene.front,.scene.side{width:100%}
+.scene .floor{z-index:1;pointer-events:none}
+.scene model-viewer{touch-action:pan-y}
+.model-title-3d{font-weight:600}
 </style>
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 </head>
 <body>
 <div class="app">
@@ -60,47 +72,25 @@ button,input{font:inherit}button{cursor:pointer}button:focus-visible,input:focus
   <aside class="sidebar">
     <div><p class="sectiontag">Paso 01 · El taller</p><h2 class="side-title">Elegí tu diseño</h2><p class="side-sub">Cada cartera es un punto de partida. ¡Hacela tuya!</p></div>
     <div class="models">
-      <button class="model active" aria-current="true"><div class="thumb"><svg viewBox="0 0 80 70" aria-hidden="true"><path d="M20 27 Q20 1 37 1 Q54 1 54 27" stroke="#855147" stroke-width="5" fill="none"/><path d="M15 23 H63 L59 65 H18 Z" fill="#a75d59"/><path d="M15 23 H63" stroke="#6a393a" stroke-width="2"/></svg></div><span><strong>Tote Aurora</strong><small>Modelo inicial</small><span class="mini-label">DISPONIBLE</span></span></button>
-      <a class="model" href="./test03.html" style="text-decoration:none;color:inherit" title="Abrir prueba 3D de cartera Meshy"><div class="thumb"><svg viewBox="0 0 80 70" aria-hidden="true"><path d="M18 27 Q18 5 36 5 Q54 5 54 27" stroke="#a6887f" stroke-width="6" fill="none"/><path d="M11 25 H67 L63 64 H15Z" fill="#dfcfc7" stroke="#99867e" stroke-width="2"/></svg></div><span><strong>Meshy Minimalista</strong><small>Modelo 3D · texturizado</small><span class="mini-label">PROBAR TEST03</span></span></a>\n      <button class="model locked" aria-disabled="true"><div class="thumb"><svg viewBox="0 0 80 70" aria-hidden="true"><rect x="8" y="26" width="65" height="35" rx="12" fill="#bc97ae"/><path d="M18 23 Q40 -4 64 23" fill="none" stroke="#927387" stroke-width="5"/></svg></div><span><strong>Mini Lía</strong><small>Bandolera</small><span class="mini-label">PRÓXIMAMENTE</span></span></button>
+      <button class="model active" aria-current="true"><div class="thumb"><svg viewBox="0 0 80 70" aria-hidden="true"><path d="M20 27 Q20 1 37 1 Q54 1 54 27" stroke="#855147" stroke-width="5" fill="none"/><path d="M15 23 H63 L59 65 H18 Z" fill="#a75d59"/><path d="M15 23 H63" stroke="#6a393a" stroke-width="2"/></svg></div><span><strong>Meshy Minimalista</strong><small>Primer modelo 3D</small><span class="mini-label">DISPONIBLE</span></span></button>
+      <button class="model locked" aria-disabled="true"><div class="thumb"><svg viewBox="0 0 80 70" aria-hidden="true"><rect x="8" y="26" width="65" height="35" rx="12" fill="#bc97ae"/><path d="M18 23 Q40 -4 64 23" fill="none" stroke="#927387" stroke-width="5"/></svg></div><span><strong>Mini Lía</strong><small>Bandolera</small><span class="mini-label">PRÓXIMAMENTE</span></span></button>
       <button class="model locked" aria-disabled="true"><div class="thumb"><svg viewBox="0 0 80 70" aria-hidden="true"><path d="M12 25 H70 L61 61 H22Z" fill="#c5a479"/><path d="M30 30 Q20 4 48 7 Q60 9 53 30" fill="none" stroke="#9d7b54" stroke-width="5"/></svg></div><span><strong>Shopper Vera</strong><small>Gran formato</small><span class="mini-label">PRÓXIMAMENTE</span></span></button>
     </div>
     <div class="side-bottom"><span style="font-size:22px">✦</span><strong>Tu estilo, tus reglas.</strong><p>Este es nuestro primer boceto interactivo. Los próximos diseños pueden usar tus vectores y renders como base.</p></div>
   </aside>
   <section class="stage-wrap">
-    <div class="crumb">Colección inicial <span>›</span> <b>Tote Aurora</b> <span>›</span> <span id="crumb-current">Personalizar</span></div>
-    <div class="stage-head"><div><h1 id="stage-title">Diseñá tu <em style="font-weight:400;color:#c87865">Aurora.</em></h1><p id="stage-desc">Probá colores, combiná materiales y elegí el tamaño ideal.</p></div><div class="stage-pill">✧ Vista conceptual · V0.1</div></div>
+    <div class="crumb">Colección inicial <span>›</span> <b>Meshy Minimalista</b> <span>›</span> <span id="crumb-current">Personalizar</span></div>
+    <div class="stage-head"><div><h1 id="stage-title">Diseñá tu <em style="font-weight:400;color:#c87865">cartera.</em></h1><p id="stage-desc">Explorá el modelo real en 3D y probá colores de muestra.</p></div><div class="stage-pill">✧ Modelo real · TEST04</div></div>
     <div class="stage" id="stage">
-      <div class="sticker">¡Es tu creación! ✨</div>
+      <div class="sticker">Primer modelo 3D ✨</div>
       <div class="modeview" role="group" aria-label="Vista de la cartera"><button data-view="front">Frente</button><button data-view="three" class="sel">3/4</button><button data-view="side">Lado</button></div>
       <div class="scene" id="scene" data-texture="liso">
         <div class="floor"></div>
-        <svg viewBox="0 0 720 510" role="img" aria-label="Ilustración conceptual de una cartera Tote con colores personalizables">
-          <defs>
-            <linearGradient id="bodyGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".29"/><stop offset=".5" stop-color="#fff" stop-opacity=".02"/><stop offset="1" stop-color="#000" stop-opacity=".18"/></linearGradient>
-            <pattern id="texture" width="6" height="6" patternUnits="userSpaceOnUse"><path d="M0 0L6 6 M6 0L0 6" stroke="#fff" stroke-width=".35" opacity=".7"/></pattern>
-            <linearGradient id="sideGrad" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#000" stop-opacity=".21"/><stop offset="1" stop-color="#fff" stop-opacity=".06"/></linearGradient>
-          </defs>
-          <g id="bag-drawing">
-            <path id="sidepiece" class="bag-body" d="M 552 139 L 612 110 L 603 386 L 548 416 Z"/>
-            <path id="side-shade" fill="url(#sideGrad)" d="M 552 139 L 612 110 L 603 386 L 548 416 Z"/>
-            <path d="M 210 146 L 612 110 L 552 139 Z" fill="#302323" opacity=".20"/>
-            <path class="bag-handle" d="M 253 151 C 248 52 257 45 310 45 C 363 45 368 56 366 154" stroke-width="19" fill="none" stroke-linecap="round"/>
-            <path class="bag-handle" d="M 405 151 C 400 38 423 34 469 40 C 525 43 524 70 520 151" stroke-width="19" fill="none" stroke-linecap="round"/>
-            <path class="bag-body" id="mainbody" d="M 192 139 L 552 139 L 548 416 L 196 416 Z" stroke="#39211d" stroke-opacity=".19" stroke-width="2"/>
-            <path id="bodyshine" fill="url(#bodyGrad)" d="M 192 139 L 552 139 L 548 416 L 196 416 Z"/>
-            <path class="texture" fill="url(#texture)" d="M 192 139 L 552 139 L 548 416 L 196 416 Z" opacity="0"/>
-            <path d="M 198 152 L 548 152" stroke="#37201c" stroke-opacity=".26" stroke-width="3"/>
-            <path d="M 204 399 L 540 399" stroke="#fff" stroke-opacity=".20" stroke-width="2" stroke-dasharray="3 6"/>
-            <path d="M 211 152 L 210 406 M 537 152 L 536 406" stroke="#3b1a17" stroke-opacity=".13" stroke-width="3"/>
-            <path class="bag-handle" d="M 254 148 L 254 241 M 365 148 L 365 241 M 406 148 L 406 241 M 519 148 L 519 241" stroke-width="18" stroke-linecap="round" opacity=".92"/>
-            <rect class="bag-metal" x="244" y="222" width="20" height="6" rx="2"/><rect class="bag-metal" x="355" y="222" width="20" height="6" rx="2"/><rect class="bag-metal" x="396" y="222" width="20" height="6" rx="2"/><rect class="bag-metal" x="509" y="222" width="20" height="6" rx="2"/>
-            <g transform="translate(319 311)" opacity=".72"><path d="M-21 0 C-14 -15 0 -12 0 -2 C0 -12 14 -15 21 0 C12 19 0 24 0 24 C0 24 -12 19 -21 0" fill="#fff2e7"/><text x="0" y="45" text-anchor="middle" font-family="Georgia,serif" font-size="15" fill="#fff7ed">atelier.</text></g>
-          </g>
-        </svg>
+        <div id="model-loading">Preparando cartera 3D…</div><model-viewer id="bag3d" src="./assets/models/meshy-minimalista.glb" alt="Cartera Meshy Minimalista en 3D" camera-controls auto-rotate rotation-per-second="10deg" shadow-intensity="1" exposure="1.05" environment-image="neutral" camera-orbit="35deg 75deg auto" interaction-prompt="auto"></model-viewer>
       </div>
       <div class="molds" id="molds">
         <div class="mold-sheet">
-          <div class="sheet-head"><div><b>Tote Aurora</b><div>Vista previa del despiece · boceto</div></div><small>HOJA DEMO 01/02</small></div>
+          <div class="sheet-head"><div><b>Meshy Minimalista</b><div>Vista previa del despiece · boceto</div></div><small>HOJA DEMO 01/02</small></div>
           <div class="parts">
             <div class="pattern"><span class="pattern-text">Frente y espalda<br><strong id="pattern-main">38 × 32 cm</strong></span></div>
             <div><div class="pattern small"><span class="pattern-text">Fuelle lateral<br><strong id="pattern-side">12 × 32 cm</strong></span></div><div style="height:12px"></div><div class="pattern small"><span class="pattern-text">Base<br><strong id="pattern-base">38 × 12 cm</strong></span></div></div>
@@ -110,101 +100,101 @@ button,input{font:inherit}button{cursor:pointer}button:focus-visible,input:focus
           <div class="mold-overlay">NO APTO PARA CORTE</div>
         </div>
       </div>
-      <div class="stage-footer"><span class="zoom-hint" id="hint">↔ Cambiá el ángulo para ver tu diseño</span><div class="rotate"><button class="round" id="prev-view" title="Girar a la izquierda">↶</button><button class="round" id="next-view" title="Girar a la derecha">↷</button></div></div>
+      <div class="stage-footer"><span class="zoom-hint" id="hint">↔ Arrastrá para girar · Rueda para zoom</span><div class="rotate"><button class="round" id="prev-view" title="Girar a la izquierda">↶</button><button class="round" id="next-view" title="Girar a la derecha">↷</button></div></div>
     </div>
-    <div class="foot-note"><span>✦ Tu diseño cobra vida, paso a paso.</span><span><b>Importante:</b> la cartera es una ilustración y no un modelo 3D real.</span></div>
+    <div class="foot-note"><span>✦ Tu diseño cobra vida, paso a paso.</span><span><b>Importante:</b> modelo GLB real; las modificaciones de tamaño todavía son visuales.</span></div>
   </section>
   <aside class="control-panel">
-    <div class="panel-title"><h2 id="panel-heading">Personalizá</h2><span class="counter" id="step-number">PASO 02 / 03</span></div>
-    <p class="panel-sub" id="panel-sub">Como en un juego: elegí cada detalle de tu cartera favorita.</p><div class="divider"></div>
+    <div class="panel-title"><h2 id="panel-heading">Personalizá</h2><span class="counter" id="step-number">MODELO 01 / 01</span></div>
+    <p class="panel-sub" id="panel-sub">Primer modelo real · colores de muestra sobre la textura original.</p><div class="divider"></div>
     <div id="custom-controls" style="display:contents">
-      <div class="control-group"><div class="fieldhead">01 · Color del cuerpo <small id="body-name">Terracota</small></div><div class="swatches" id="colors-body"></div></div>
-      <div class="divider"></div>
-      <div class="control-group"><div class="fieldhead">02 · Color de las manijas <small id="handle-name">Cacao</small></div><div class="swatches" id="colors-handle"></div></div>
-      <div class="divider"></div>
-      <div class="control-group"><div class="fieldhead">03 · Textura <small>Simulada</small></div><div class="materials"><button class="material selected" data-material="liso">Suave</button><button class="material" data-material="graneado">Graneado</button><button class="material" data-material="lona">Lona</button></div></div>
-      <div class="divider"></div>
-      <div class="control-group"><div class="fieldhead">04 · Medidas <small>Ejemplo visual</small></div>
-        <div class="slider-row"><div class="range-label"><label for="width">Ancho</label><output id="width-label">38 cm</output></div><input type="range" id="width" min="26" max="48" value="38"></div>
-        <div class="slider-row"><div class="range-label"><label for="height">Alto</label><output id="height-label">32 cm</output></div><input type="range" id="height" min="22" max="42" value="32"></div>
-        <div class="slider-row"><div class="range-label"><label for="depth">Profundidad</label><output id="depth-label">12 cm</output></div><input type="range" id="depth" min="6" max="18" value="12"></div>
-      </div>
-    </div>
-    <div id="mold-controls" hidden>
+<div class="control-group"><div class="fieldhead">01 · Color de la cartera <small id="body-name">Original</small></div><div class="swatches" id="colors-body"></div><p id="color-warning">Prueba de color global: este modelo conserva una sola textura. Más adelante incorporaremos archivos con piezas y materiales independientes.</p></div>
+<div class="divider"></div>
+<div class="control-group"><div class="fieldhead">02 · Tamaño de visualización <small id="scale-label">100%</small></div><div class="slider-row"><input type="range" id="scale" min="0.7" max="1.3" step="0.05" value="1" style="width:100%;accent-color:#d78169"></div><p id="color-warning">Este control solo agranda o achica el modelo 3D. No modifica los moldes de fabricación.</p></div>
+<div class="divider"></div>
+<div class="control-group"><div class="fieldhead">03 · Navegación del visor</div><div class="materials"><button class="material" id="auto-rotate">Pausar giro</button><button class="material" id="reset-view">Centrar</button><button class="material" id="reset-color">Original</button></div></div>
+<div id="view-status" role="status" aria-live="polite">Cargando el modelo 3D…</div>
+</div>
+<div id="mold-controls" hidden>
       <div class="placeholder"><b>Tu diseño ya tiene un despiece visual.</b><br>Este paso muestra cómo se podría organizar el visor de moldes. Todavía no genera patrones reales, PDFs ni páginas A4 a escala.</div>
       <p style="color:#857970;font-size:12px;line-height:1.7">Cuando incorporemos tus moldes vectoriales podremos definir costuras, pinzas, márgenes, fuelles y paginado de impresión.</p>
     </div>
-    <div class="action-area"><button class="primary" id="go-molds">Ver mis moldes →</button><button class="secondary" id="bottom-action">♡ Guardar borrador local</button><div class="helper" id="helper">Borrador en este navegador · Sin cuenta ni Google Drive por ahora.</div></div>
+    <div class="action-area"><button class="primary" id="go-molds" disabled title="Disponible cuando integremos moldes SVG">Moldes SVG · Próximamente</button><button class="secondary" id="bottom-action">♡ Guardar preferencias</button><div class="helper" id="helper">Borrador de color y visualización guardado en este navegador.</div></div>
   </aside>
 </main>
 <div role="status" aria-live="polite" class="toast" id="toast"></div>
 </div>
 <script>
-(function(){
+(()=>{
 'use strict';
-const defaults={body:'#ac5d58',handle:'#6c3e38',material:'liso',width:38,height:32,depth:12,view:'three'};
-let s={...defaults},isMolds=false,toastTimer;
-try {const saved=JSON.parse(localStorage.getItem('atelier-demo')||'null');if(saved&&typeof saved==='object')s={...s,...saved};}catch(e){}
-const $=id=>document.getElementById(id);
-const colorNames={'#ac5d58':'Terracota','#d4b3aa':'Rosa viejo','#e1c692':'Manteca','#7b8c7e':'Salvia','#69577a':'Lavanda','#342e33':'Negro','#6c3e38':'Cacao','#b58c64':'Caramelo','#eee3d6':'Natural','#879398':'Pizarra'};
-const bodyColors=['#ac5d58','#d4b3aa','#e1c692','#7b8c7e','#69577a','#342e33'];
-const handleColors=['#6c3e38','#b58c64','#eee3d6','#342e33','#879398'];
+const modelId='meshy-minimalista';
+const defaults={modelId,color:'#ffffff',scale:1,view:'three'};
+const colorNames={'#ffffff':'Original','#e6b3b4':'Rosa','#ceb69e':'Beige','#98aaa4':'Salvia','#8ca5c8':'Celeste','#ba7797':'Malva','#755c52':'Cacao','#404044':'Grafito'};
+const colors=Object.keys(colorNames);
 const views=['front','three','side'];
-function swatches(el,colors,key){
-  el.innerHTML='';
-  colors.forEach(c=>{
-    const b=document.createElement('button');b.className='swatch'+(s[key]===c?' selected':'');b.type='button';b.style.setProperty('--swatch',c);b.setAttribute('aria-label',colorNames[c]);b.setAttribute('aria-pressed',String(s[key]===c));
-    b.title=colorNames[c];b.addEventListener('click',()=>{s[key]=c;render()});el.appendChild(b);
-  });
+const camera={front:'0deg 75deg auto',three:'35deg 75deg auto',side:'90deg 75deg auto'};
+const viewer=document.getElementById('bag3d'), status=document.getElementById('view-status');
+let state={...defaults},toastTimer=null,ready=false;
+try{
+ const old=JSON.parse(localStorage.getItem('atelier-model-'+modelId)||'null');
+ if(old && old.modelId===modelId)state={...state,...old};
+}catch(e){}
+if(!colors.includes(state.color))state.color=defaults.color;
+if(!['front','three','side'].includes(state.view))state.view='three';
+if(!Number.isFinite(state.scale)||state.scale<0.7||state.scale>1.3)state.scale=1;
+const $=id=>document.getElementById(id);
+function tint(hex){
+ if(!ready)return;
+ const rgb=[0,2,4].map(n=>parseInt(hex.slice(n+1,n+3),16)/255);
+ for(const m of viewer.model?.materials||[])m.pbrMetallicRoughness.setBaseColorFactor([...rgb,1]);
 }
-function setView(view){s.view=view;render();}
-function patterns(){
- $('pattern-main').textContent=s.width+' × '+s.height+' cm';
- $('pattern-side').textContent=s.depth+' × '+s.height+' cm';
- $('pattern-base').textContent=s.width+' × '+s.depth+' cm';
+function changeView(v){
+ state.view=v; viewer.autoRotate=false;viewer.cameraOrbit=camera[v];
+ document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('sel',b.dataset.view===v));
 }
-function render(){
- document.documentElement.style.setProperty('--body',s.body);document.documentElement.style.setProperty('--handle',s.handle);
- $('scene').dataset.texture=s.material;
- $('scene').className='scene'+(s.view==='front'?' front':s.view==='side'?' side':'');
- document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('sel',b.dataset.view===s.view));
- document.querySelectorAll('[data-material]').forEach(b=>b.classList.toggle('selected',b.dataset.material===s.material));
- ['width','height','depth'].forEach(key=>{$(key).value=s[key];$(key+'-label').textContent=s[key]+' cm'});
- $('body-name').textContent=colorNames[s.body]||'Personalizado';$('handle-name').textContent=colorNames[s.handle]||'Personalizado';
- swatches($('colors-body'),bodyColors,'body');swatches($('colors-handle'),handleColors,'handle');patterns();
- // Adjust the illustrated body dimensions. Not a production geometry engine.
- const xl=372-s.width*4.74, xr=372+s.width*4.74, yt=278-s.height*4.34, yb=278+s.height*4.34;
- const side=Math.round(s.depth*5);
- const bodyPath='M '+xl+' '+yt+' L '+xr+' '+yt+' L '+(xr-4)+' '+yb+' L '+(xl+4)+' '+yb+' Z';
- ['mainbody','bodyshine'].forEach(id=>$(id).setAttribute('d',bodyPath));
- document.querySelector('.texture').setAttribute('d',bodyPath);
- const sidePath='M '+xr+' '+yt+' L '+(xr+side)+' '+(yt-side*.48)+' L '+(xr+side-9)+' '+(yb-30)+' L '+(xr-4)+' '+yb+' Z';
- $('sidepiece').setAttribute('d',sidePath);$('side-shade').setAttribute('d',sidePath);
+function updateColors(){
+ const palette=$('colors-body');palette.replaceChildren();
+ for(const color of colors){
+  const b=document.createElement('button');
+  b.type='button';b.className='swatch'+(state.color===color?' selected':'');
+  b.style.setProperty('--swatch',color);b.title=colorNames[color];b.setAttribute('aria-label',colorNames[color]);
+  b.setAttribute('aria-pressed',String(state.color===color));
+  b.addEventListener('click',()=>{state.color=color;tint(color);updateColors();});
+  palette.appendChild(b);
+ }
+ $('body-name').textContent=colorNames[state.color];
 }
-function showMolds(on){
- isMolds=on;$('stage').classList.toggle('mold-stage',on);$('molds').classList.toggle('show',on);
- $('custom-controls').hidden=on; $('custom-controls').style.display=on?'none':'contents';
- $('mold-controls').hidden=!on;$('crumb-current').textContent=on?'Mis moldes':'Personalizar';
- $('stage-title').innerHTML=on?'Tus <em style="font-weight:400;color:#c87865">moldes.</em>':'Diseñá tu <em style="font-weight:400;color:#c87865">Aurora.</em>';
- $('stage-desc').textContent=on?'Así podría verse el visor de piezas vectoriales.':'Probá colores, combiná materiales y elegí el tamaño ideal.';
- $('panel-heading').textContent=on?'Vista de moldes':'Personalizá';
- $('step-number').textContent=on?'PASO 03 / 03':'PASO 02 / 03';
- $('panel-sub').textContent=on?'Boceto del futuro visor de impresión.':'Como en un juego: elegí cada detalle de tu cartera favorita.';
- $('go-molds').textContent=on?'← Volver a diseñar':'Ver mis moldes →';
- $('bottom-action').textContent=on?'♡ Guardar este diseño':'♡ Guardar borrador local';
- $('helper').textContent=on?'Moldes ilustrativos, no están listos para imprimir.':'Borrador en este navegador · Sin cuenta ni Google Drive por ahora.';
+function updateScale(v){state.scale=v;viewer.scale=v+' '+v+' '+v; $('scale-label').textContent=Math.round(v*100)+'%';$('scale').value=v;}
+function toast(msg){
+ const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);
+ toastTimer=setTimeout(()=>t.classList.remove('show'),2300);
 }
-function notify(msg){let t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2600);}
-function save(){try{localStorage.setItem('atelier-demo',JSON.stringify(s));notify('♡ Diseño guardado en este navegador');}catch(e){notify('Tu navegador no permitió guardar el borrador');}}
-['width','height','depth'].forEach(id=>$(id).addEventListener('input',e=>{s[id]=Number(e.target.value);render();}));
-document.querySelectorAll('[data-material]').forEach(b=>b.addEventListener('click',()=>{s.material=b.dataset.material;render()}));
-document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view)));
-$('prev-view').addEventListener('click',()=>setView(views[(views.indexOf(s.view)+2)%3]));
-$('next-view').addEventListener('click',()=>setView(views[(views.indexOf(s.view)+1)%3]));
-$('go-molds').addEventListener('click',()=>showMolds(!isMolds));
+function save(){
+ try{localStorage.setItem('atelier-model-'+modelId,JSON.stringify(state));toast('Preferencias guardadas en este navegador');}
+ catch(e){toast('No fue posible guardar en este navegador');}
+}
+viewer.addEventListener('load',()=>{
+ ready=true;$('model-loading').hidden=true; updateScale(state.scale);tint(state.color);
+ changeView(state.view); viewer.autoRotate=true;
+ $('auto-rotate').textContent='Pausar giro';
+ status.textContent='✓ Modelo 3D cargado · Color general de prueba · Textura original conservada';
+});
+viewer.addEventListener('error',()=>{
+ $('model-loading').textContent='No se pudo cargar el modelo 3D. Intentá recargar la página.';
+ status.textContent='Error de carga del GLB. Revisá la conexión y la publicación del archivo.';
+});
+for(const b of document.querySelectorAll('[data-view]'))b.addEventListener('click',()=>changeView(b.dataset.view));
+$('prev-view').addEventListener('click',()=>changeView(views[(views.indexOf(state.view)+2)%3]));
+$('next-view').addEventListener('click',()=>changeView(views[(views.indexOf(state.view)+1)%3]));
+$('scale').addEventListener('input',e=>updateScale(Number(e.target.value)));
+$('auto-rotate').addEventListener('click',e=>{viewer.autoRotate=!viewer.autoRotate;e.currentTarget.textContent=viewer.autoRotate?'Pausar giro':'Giro automático';});
+$('reset-view').addEventListener('click',()=>{changeView('three');viewer.autoRotate=true;$('auto-rotate').textContent='Pausar giro';});
+$('reset-color').addEventListener('click',()=>{state.color='#ffffff';tint(state.color);updateColors();});
 $('save-top').addEventListener('click',save);$('bottom-action').addEventListener('click',save);
-document.querySelectorAll('.model.locked').forEach(b=>b.addEventListener('click',()=>notify('Este modelo se incorporará más adelante')));
-render();showMolds(false);
+document.querySelectorAll('.model.locked').forEach(b=>b.addEventListener('click',()=>toast('Incorporaremos más modelos a este catálogo')));
+$('go-molds').disabled=true;
+updateColors();$('scale').value=state.scale;$('scale-label').textContent=Math.round(state.scale*100)+'%';
+document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('sel',b.dataset.view===state.view));
 })();
 </script>
 </body>
